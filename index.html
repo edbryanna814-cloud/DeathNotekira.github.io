@@ -227,6 +227,11 @@
 </head>
 <body class="loading">
 
+<!-- Background music: place your audio file at assets/audio.mp3 -->
+<audio id="bgMusic" autoplay loop preload="auto">
+  <source src="assets/PERFECT VICTORY! EDIT AMV Death Note.mp3" type="audio/mpeg">
+</audio>
+
 <div class="loader" id="loader">
   <div class="loader-inner">
     <div class="loader-kanji">死</div>
@@ -326,6 +331,23 @@
 
 <script>
 (() => {
+  /* ---------- background music: start on first scroll ---------- */
+  const bgMusic = document.getElementById("bgMusic");
+  if (bgMusic) {
+    bgMusic.volume = 0.35; // Volume: 0.0 to 1.0
+
+    const startMusicOnScroll = () => {
+      bgMusic.play().then(() => {
+        // Start only once; keep the music looping afterward.
+        window.removeEventListener("scroll", startMusicOnScroll);
+      }).catch(() => {
+        // If the browser still blocks playback, try again on the next scroll.
+      });
+    };
+
+    window.addEventListener("scroll", startMusicOnScroll, { passive: true });
+  }
+
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const map = (v, a, b) => clamp((v - a) / (b - a));
